@@ -31,20 +31,20 @@ public class SearchController {
 
 
    @PostMapping("/results")
-    public String displaySearchResults (Model model, @RequestParam String column, @RequestParam(required = false) String searchTerm ) {
+    public String displaySearchResults (Model model, @RequestParam String searchType, @RequestParam(required = false) String searchTerm ) {
        ArrayList<Job> jobs;
-       if (searchTerm.equals("all") || (searchTerm.equals(""))){
+       if (searchTerm.equals("")){
            jobs = JobData.findAll();
            model.addAttribute("title", "All Jobs");
+
        } else {
-           jobs = JobData.findByColumnAndValue(column, searchTerm);
-           model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + searchTerm);
+           jobs = JobData.findByColumnAndValue(searchType, searchTerm);
+           model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": " + searchTerm);
        }
        model.addAttribute("jobs", jobs);
+       model.addAttribute("columns", columnChoices);
 
-
-
-       return "redirect: /search";
+       return "search";
    }
 
 }
